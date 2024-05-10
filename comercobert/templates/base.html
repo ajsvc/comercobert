@@ -1,0 +1,560 @@
+{# Load the tag library #}
+{% load cookielaw_tags %}
+
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+{% get_media_prefix as MEDIA_PREFIX %}
+{% load django_bootstrap_breadcrumbs %}
+
+
+{% block breadcrumbs %}
+    {% clear_breadcrumbs %}
+    {% breadcrumb_safe "<i class='fas fa-home fa-sm'></i> Inici" 'home' %}
+{% endblock %}
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="ca">
+
+<head>
+    <meta charset="utf-8">
+	  <!--  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	  <meta http-equiv="x-ua-compatible" content="ie=edge">
+	
+	<link rel="apple-touch-icon" sizes="57x57" href="{% static 'ico/apple-icon-57x57.png' %}">
+	<link rel="apple-touch-icon" sizes="60x60" href="{% static 'ico/apple-icon-60x60.png' %}">
+	<link rel="apple-touch-icon" sizes="72x72" href="{% static 'ico/apple-icon-72x72.png' %}">
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static 'ico/apple-icon-76x76.png' %}">
+	<link rel="apple-touch-icon" sizes="114x114" href="{% static 'ico/apple-icon-114x114.png' %}">
+	<link rel="apple-touch-icon" sizes="120x120" href="{% static 'ico/apple-icon-120x120.png' %}">
+	<link rel="apple-touch-icon" sizes="144x144" href="{% static 'ico/apple-icon-144x144.png' %}">
+	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'ico/apple-icon-152x152.png' %}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'ico/apple-icon-180x180.png' %}">
+	<link rel="icon" type="image/png" sizes="192x192"  href="{% static 'ico/android-icon-192x192.png' %}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{% static 'ico/favicon-32x32.png' %}">
+	<link rel="icon" type="image/png" sizes="96x96" href="{% static 'ico/favicon-96x96.png' %}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'ico/favicon-16x16.png' %}">
+	<!--  <link rel="manifest" href="{% static 'ico/manifest.json' %}">-->
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="{% static 'ico/ms-icon-144x144.png' %}">
+	<meta name="theme-color" content="#ffffff">
+	
+	
+	 <title>Ajuntament Sant Vicenç de Castellet</title>
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:300i,300,400,400i,500,600,700,800,900" rel="stylesheet">
+  	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+  	
+  	<link href="{% static "cookielaw/css/cookielaw.css"%}" rel="stylesheet" />
+  	
+  	
+  	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+	<!-- Google Fonts -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+	<!-- Bootstrap core CSS -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Material Design Bootstrap -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+	
+<style>
+
+{% block estil %}
+{% endblock %}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+	background-color: #fff;
+	font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.3rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+#logoAjuntament{
+	margin-top: 10px;
+}
+
+
+.default{
+	background-color: #802523 !important;	
+}
+.default-text{
+	color: #802523 !important;
+}
+.primary{
+	color: #802523 !important;
+}
+
+.btn-primary{
+	background-color: #802523 !important;
+	color: #fff !important;
+}
+
+
+.btn-outline-svc, .btn-outline-svc:hover, .btn-outline-svc:active, .btn-outline-svc:visited {
+    border: 1px solid #802523 !important;
+}
+
+.svc-badge{
+	background-color: #802523 !important;
+	font-weight: normal;
+}
+
+
+
+
+
+
+
+.active-default-2 input.form-control[type=search]:focus:not([readonly]),
+.active-default-2 input.form-control[type=text]:focus:not([readonly]) {
+  border-bottom: 1px solid #802523;
+  box-shadow: 0 1px 0 0 #802523;
+}
+.active-default input.form-control[type=search],
+.active-default input.form-control[type=text] {
+  border-bottom: 1px solid #802523;
+  box-shadow: 0 1px 0 0 #802523;
+}
+.active-default .fa, .active-default-2 .fa {
+  color: #802523;
+}
+
+#caixaPrincipal {
+  background-color: #ffffff;
+  /*font-family: Raleway;*/
+  /*padding: 20px;*/
+  min-width: 300px;
+  min-height: 300px;
+  margin-top: 50px;
+  
+}
+
+.adaptar-img {
+  background-size: cover;
+  background-position: center;
+}
+.cabecera-type {
+  min-height: 300px;
+}
+
+.cabecera-type .contenedor-titulo{
+  color: white;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-top: 60px;
+}
+.contenedor-titulo-subtitulo {
+  font-size: 1.5rem;
+  background: rgba(0,0,0,.6);
+  padding: 5px 10px;
+  display: inline-block;
+}
+.contendor-fondo-oscuro {
+  background: rgba(0,0,0,.6);
+   padding: 5px 10px;
+  display: inline-block;
+}
+.cabecera-type .contenedor-titulo h1{
+  font-size: 2rem;
+  background: rgba(0,0,0,.6);
+  padding: 0px 10px;
+  margin-bottom: 0;
+  display: inline-block;
+  clear: right;
+}
+
+
+.nav-bar-menu-principal a:not(:disabled):not(.disabled).active, 
+.nav-bar-menu-principal a:not(:disabled):not(.disabled):active, 
+.show>.btn-menu-principal.dropdown-toggle,
+.nav-bar-menu-principal a:active,
+.nav-bar-menu-principal a:focus
+{
+	border-color: #802523 !important;
+	color: #802523 !important;
+	border-bottom:3px solid #802523;
+}
+
+.nav-bar-menu-principal a:hover{
+	border-color: #802523 !important;
+	color: #802523 !important;
+	font-weight: bolder;
+}
+
+.nav-bar-menu-principal a{
+	color: #000;
+}
+
+.active{
+	color: #802523 !important;
+	font-weight: bolder !important;
+}
+.active-dropdown{
+	background-color: #802523 !important;
+	color: #fff !important;
+}
+.active-breadcrumb{
+	border: 0;
+}
+
+.dropdown-menu a:active,
+.dropdown-menu a:focus,
+.dropdown-menu a:hover{
+	background-color: #802523 !important;
+	border: none !important;
+	color: #fff !important;	
+}
+
+.breadcrumb {
+    margin-bottom: 0;
+    background-color: transparent;
+    font-size: 1.1rem;
+}
+
+.breadcrumb a:not(:disabled):not(.disabled).active, 
+.breadcrumb a:not(:disabled):not(.disabled):active, 
+.breadcrumb a:active,
+.breadcrumb a:focus
+{
+	color: #802523;
+	border: 0;
+}
+.destacat,
+.xarxa_social a,
+.noticia a,
+.destacat a{
+	color: #3c3c3c;
+}
+.xarxa_social a:hover,
+.noticia a:hover,
+.destacat a:hover
+{
+	color: #802523;
+	border: 0;
+}
+.destacat img {
+	-webkit-filter: grayscale(1); 
+	filter: grayscale(1);
+}
+.destacat img:hover {
+	-webkit-filter: grayscale(0); 
+	filter: none;
+}
+
+.breadcrumb a:hover{
+	color: #802523;
+	border: 0;
+}
+.breadcrumb a{
+	color: #000;
+}
+
+.list-categories a{
+	color: #3c3c3c;
+}
+.list-categories a:hover
+{
+	color: #802523;
+	border: 0;
+	font-size: bold;
+}
+
+
+.data-header-agenda{
+	border-bottom: 2px solid #802523;
+}
+
+.tab-link {
+	color: #000 !important;
+}
+.tab-link:not(:disabled):not(.disabled).active, 
+.tab-link:not(:disabled):not(.disabled):active, 
+.tab-link:hover,
+.tab-link:active,
+.tab-link:focus{
+	color: #802523 !important;
+}
+.tab-text{
+	color: #333 !important;
+}
+
+.link {
+	color: #000 !important;
+}
+.link:not(:disabled):not(.disabled).active, 
+.link:not(:disabled):not(.disabled):active, 
+.link:hover,
+.link:active,
+.link:focus{
+	color: #802523 !important;
+	font-weight: bolder;
+}
+
+
+.myAlert-bottom{
+    position: fixed;
+    bottom: 5px;
+    left:2%;
+    width: 96%;
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+{% load static %}
+
+
+<nav class="navbar navbar-expand-lg navbar-dark default p-0">
+        <ul class="navbar-nav mr-auto d-none d-sm-inline-flex">
+          <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="#">Contacte</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="#">93 693 0611</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="#">svcastellet@svc.cat</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+          <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="https://twitter.com/svcastellet?lang=ca" target="_blank">
+              <i class="fab fa-twitter fa-xs"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="https://www.facebook.com/AjuntamentSVCastellet/" target="_blank">
+              <i class="fab fa-facebook fa-xs"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="https://www.instagram.com/svcastellet/" target="_blank">
+              <i class="fab fa-instagram fa-xs"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect waves-light" href="https://www.youtube.com/channel/UCuRGLHpAr2c3IteHkx3gOpw" target="_blank">
+              <i class="fab fa-youtube fa-xs"></i>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-user fa-xs"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink">
+	            <a class="dropdown-item waves-effect waves-light" href="#">Entrar</a>
+	            {% if user.is_authenticated %}
+				<a class="dropdown-item waves-effect waves-light" href="#">Sortir</a>
+				{% endif %}
+            </div>
+          </li>
+        </ul>
+    </nav>
+
+<div class="p-3" >
+	<div class="container-lg text-center">
+		<h1>COMERÇ OBERT A SANT VICENÇ DE CASTELLET</h1>
+	</div>
+</div>
+
+
+<nav class="navbar navbar-default navbar-light nav-bar-menu-principal navbar-expand-lg shadow-none border #fafafa grey lighten-5 p-0" >
+	<!-- Collapse button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="sr-only">Commutador de navegació</span>
+    <i class="fa fa-bars default-text" aria-hidden="true"></i><span class="default-text pl-2"> Menú principal </span>
+  </button>
+	<div class="collapse navbar-collapse justify-content-center" id="menuPrincipal">
+		{% with request.resolver_match.url_name as url_name %}
+		<ul class="navbar-nav">
+		    <li class="nav-item pr-2">
+				<a class="nav-link {% if url_name == "home" %} active{% endif %}" href="{% url 'home' %}" role="button">ESTABLIMENTS</a>	
+			</li>
+			<li class="nav-item pr-2">
+				<a class="nav-link {% if url_name == "alta" %} active{% endif %}" href="{% url 'alta' %}" role="button">INSCRIURE'T</a>	
+			</li>
+		</ul>
+		{% endwith %}
+	</div>
+</nav>
+
+
+{% block slides %}
+{% endblock %}
+
+{% block content %}
+
+		
+		
+		
+{% endblock %}
+
+
+
+<!-- Footer -->
+
+<footer class="page-footer font-small #eeeeee grey lighten-3 pt-4 text-dark">
+<hr>
+
+  <!-- Footer Links -->
+  <div class="container text-center text-md-left">
+
+    <!-- Footer links -->
+    <div class="row text-center text-md-left mt-3 pb-3">
+
+      <!-- Grid column -->
+      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+        <img src="{% static "logo_footer.png" %}" alt="Logo Ajuntament" class="img-responsive" width="180em";>
+      </div>
+      <!-- Grid column -->
+
+      <hr class="w-100 clearfix d-md-none">
+
+      
+      <!-- Grid column -->
+
+      <hr class="w-100 clearfix d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h6 class="text-uppercase mb-4 font-weight-bold">Termes i condicions</h6>
+        <p>
+          <a class="text-dark" href="https://www.svc.cat/condicions-dus/" target="_blank">Avís legal</a>
+        </p>
+      </div>
+
+      <!-- Grid column -->
+      <hr class="w-100 clearfix d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h6 class="text-uppercase mb-4 font-weight-bold">Contacte</h6>
+        <p>
+          <i class="fas fa-home mr-3"></i> Plaça de l'Ajuntament, 10<br/>08295 Sant Vicenç de Castellet</p>
+        <p>
+          <i class="fas fa-envelope mr-3"></i> svcastellet@svc.cat</p>
+        <p>
+          <i class="fas fa-phone mr-3"></i> 936 930 611</p>
+        <p>
+          <i class="fas fa-print mr-3"></i> 936 930 610</p>
+      </div>
+      <!-- Grid column -->
+
+    </div>
+    <!-- Footer links -->
+
+    <hr>
+
+    <!-- Grid row -->
+    <div class="row d-flex align-items-center">
+
+      <!-- Grid column -->
+      <div class="col-md-7 col-lg-8">
+
+        <!--Copyright-->
+        <p class="text-center text-md-left">© {% now "Y" %} Copyright:
+          <a class="text-dark" href="https://www.svc.cat">
+            <strong> Ajuntament de Sant Vicenç de Castellet</strong>
+          </a>
+        </p>
+
+      </div>
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+      <div class="col-md-5 col-lg-4 ml-lg-0">
+
+        <!-- Social buttons -->
+        <div class="text-center text-md-right">
+          <ul class="list-unstyled list-inline">
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1" href="https://twitter.com/svcastellet?lang=ca" target="_blank">
+                <i class="fab fa-twitter text-dark"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1" href="https://www.facebook.com/AjuntamentSVCastellet/" target="_blank">
+                <i class="fab fa-facebook-f text-dark"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1" href="https://www.instagram.com/svcastellet/" target="_blank">
+                <i class="fab fa-instagram text-dark"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mx-1" href="https://www.youtube.com/channel/UCuRGLHpAr2c3IteHkx3gOpw" target="_blank">
+                <i class="fab fa-youtube text-dark"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <!-- Grid column -->
+
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+  {% cookielaw_banner %}
+
+</footer>
+<!-- Footer -->
+
+
+
+
+<script src="{% static "cookielaw/js/cookielaw.js"%}" type="text/javascript"></script>
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+
+<script>
+$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
+
+{% block script %}{% endblock %}
+
+
+{% block extra-js %}
+
+{% endblock %}
+
+
+
+</body>
+</html>

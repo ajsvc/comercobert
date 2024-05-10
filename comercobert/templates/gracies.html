@@ -1,0 +1,26 @@
+{% extends 'base.html' %} 
+{% block estil %}
+
+h1 {
+  text-align: center;  
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+{% load static %}
+
+
+<div id="caixaPrincipal" class="text-justify container-lg">
+  <h1>Gràcies {{ establiment.nom_propietari }} per donar-te d'alta al lloc web comercobert.svc.cat</h1>
+  <p class="mt-5">S'ha procedit a donar d'alta l'establiment: {{ establiment.nom }}</p>
+  <p>Es procediran a revisar les dades que ens has proporcionat i en breu estarà disponible tota la informació al lloc web.</p>
+  <p>Moltes gràcies</p>
+
+</div>
+
+
+{% endblock %}

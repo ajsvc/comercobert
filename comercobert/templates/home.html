@@ -1,0 +1,254 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% load cropping %}
+{% load l10n %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+{% load django_bootstrap_breadcrumbs %}
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block estil %}
+	.form-group{
+		margin-left: 15px;
+	}
+	form label {
+    	color: #fff;
+	}
+	
+	.map {
+        height: 400px;
+        width: 100%;
+      }
+      
+      
+    .form-check-input{
+	  position: relative !important;
+	  margin: 0 !important;
+	  width: 20px !important;
+	}
+	.form-check-label{
+	padding-left: 5px !important;
+	  margin: 0 !important;
+	  display: inline !important;
+	}
+	.btn-form{
+		width: 100%;
+		background-color: #e9ecf3 !important;
+		color: #000 !important;
+	}
+	
+	@media (max-width: 830px) {
+  .form-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+	
+	
+{% endblock %}
+
+
+
+
+{% block slides %}
+
+{% endblock %}
+
+ 
+ 
+
+{% block content %}
+ 
+<div class="mt-0 mb-5" id="caixaPrincipal" >
+
+
+
+	
+<div id="map" class="map"><div id="popup"></div></div>
+
+
+
+<div class="p-3 default" >
+		<div class="container-lg">
+			<form action="{% url 'home' %}" method="get" id="formFiltrarEstabliment" role="form" class="form-inline justify-content-center">
+			{% csrf_token %}
+			{{ form.non_field_errors }}
+  			{{ form.source.errors }}
+  			{{ form.source }}
+     		{% bootstrap_form form layout='inline' %}
+     		<div class="form-group">
+     		{% bootstrap_button "Filtrar" button_type="submit" button_class="btn btn-form mb-2" %}
+			 </div>
+			</form>
+			
+		</div>
+	</div>
+	
+	
+	
+
+
+
+	{% if establiments %}
+	<section class="container-lg mt-5 mb-5">
+	
+	<div class="row">
+	  	{% for establiment in establiments %}
+			  <div class="col-sm-4 p-3">
+			    <div class="card">
+			      <div class="card-body">
+			        <h4 class="card-title">{{ establiment.nom }}</h4>
+			        {% if establiment.reparteix_domicili %}
+					<div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-motorcycle p-2 mr-2" style="width: 30px;"></i><span class="ml-1">Fa entrega a domicili</span></div>
+			        {% endif %}
+			        {% if establiment.per_emportar %}
+			        <div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-shopping-bag p-2 mr-2 " style="width: 30px;"></i><span class="ml-1">Fa menjar per emportar</span></div>
+			        {% endif %}					
+			        {% if establiment.telefon %}
+			        <div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-phone p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.telefon }}</span></div>
+			        {% endif %}
+			        {% if establiment.mobil %}
+			        <div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-mobile-alt p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.mobil }}</span></div>
+			        {% endif %}
+			        {% if establiment.email %}
+			        <div class="text-left" style="font-size: 1rem;"><i class="default-text far fa-envelope p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.email }}</span></div>
+			        {% endif %}
+			        {% if establiment.whatsapp %}
+			        <div class="text-left" style="font-size: 1rem;"><i class="default-text fab fa-whatsapp p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.whatsapp }}</span></div>
+			        {% endif %}
+			        {% if establiment.adreca %}
+			        <div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-map-marker-alt p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.adreca }}</span></div>
+			        {% endif %}
+			        
+			        <div class="mt-3" style="font-size: 1rem;">Categories:</div>
+			        <div>
+			        	{% for cat in establiment.categories.all %}
+			        		<span class="badge badge-pill badge-default svc-badge">{{ cat.nom }}</span>
+			        	{% endfor %}
+			        </div>
+			        <div class="d-flex justify-content-center"><a href="{% url 'establiment_detall' establiment.slug %}" class="btn btn-primary mt-3">MÉS INFORMACIÓ</a></div>
+			        
+			      </div>
+			    </div>
+			  </div>
+		{% endfor %}
+		
+	</div>
+	
+	</section>	
+	{% else %}
+	<div class="container-lg p-5"><p>No s'ha trobat establiments amb aquest criteri</p></div>
+	{% endif %}
+	
+
+	
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ maps_api }}&callback=initMap&libraries=&v=weekly" defer></script>
+
+    
+<script type="text/javascript">
+
+//Initialize and add the map
+function initMap() {
+
+	const center = { lat: 41.6674, lng: 1.8610 };
+  	
+	const map = new google.maps.Map(document.getElementById("map"), {
+	  zoom: 15,
+	  center: center,
+	  scrollwheel: false,
+	  navigationControl: false,
+	  mapTypeControl: false,
+	  streetViewControl: false,
+	  scaleControl: true
+	});
+  
+	
+	
+	
+	
+	
+	
+	
+	{% for establiment in establiments %}
+		{% if establiment.location %}
+		
+			const contentString{{ establiment.id }} =
+				'<h4 class="card-title">{{ establiment.nom }}</h4>' +
+		        {% if establiment.reparteix_domicili %}
+				'<div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-motorcycle p-2 mr-2" style="width: 30px;"></i><span class="ml-1">Fa entrega a domicili</span></div>' +
+		        {% endif %}
+		        {% if establiment.per_emportar %}
+		        '<div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-shopping-bag p-2 mr-2 " style="width: 30px;"></i><span class="ml-1">Fa menjar per emportar</span></div>' +
+		        {% endif %}					
+		        {% if establiment.telefon %}
+		        '<div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-phone p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.telefon }}</span></div>' +
+		        {% endif %}
+		        {% if establiment.mobil %}
+		        '<div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-mobile-alt p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.mobil }}</span></div>' +
+		        {% endif %}
+		        {% if establiment.email %}
+		        '<div class="text-left" style="font-size: 1rem;"><i class="default-text far fa-envelope p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.email }}</span></div>' +
+		        {% endif %}
+		        {% if establiment.whatsapp %}
+		        '<div class="text-left" style="font-size: 1rem;"><i class="default-text fab fa-whatsapp p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.whatsapp }}</span></div>' +
+		        {% endif %}
+		        {% if establiment.adreca %}
+		        '<div class="text-left" style="font-size: 1rem;"><i class="default-text fas fa-map-marker-alt p-2 mr-2" style="width: 30px;"></i><span class="ml-1">{{ establiment.adreca }}</span></div>' +
+		        {% endif %}
+		        
+		        '<div class="mt-3" style="font-size: 1rem;">Categories:</div>' +
+		        '<div>'+
+		        	{% for cat in establiment.categories.all %}
+		        		'<span class="badge badge-pill badge-default svc-badge">{{ cat.nom }}</span>' +
+		        	{% endfor %}
+		        '</div>' +
+		        '<div class="d-flex justify-content-center"><a href="'+'{% url 'establiment_detall' establiment.slug %}' +'" class="btn btn-primary mt-3">MÉS INFORMACIÓ</a></div>';
+		    
+		    
+		  const infowindow{{ establiment.id }} = new google.maps.InfoWindow({
+		    content: contentString{{ establiment.id }},
+		  });
+		
+		
+		
+			const marker{{ establiment.id }} = new google.maps.Marker({
+			      position: { lat: {{ establiment.location.y|unlocalize }}, lng: {{ establiment.location.x|unlocalize }} },
+			      map: map,
+			      title: "{{ establiment.nom }",
+			      zIndex: {{ establiment.id }},
+			});
+		
+			marker{{ establiment.id }}.addListener('click', function() {
+	    	    infowindow{{ establiment.id }}.open(map, marker{{ establiment.id }});
+	    	});
+	    	
+			
+		{% endif %}
+	{% endfor %}
+	
+	
+	
+}
+
+  </script>
+
+{% endblock %}
