@@ -73,7 +73,7 @@ class Establiment(models.Model):
     cognoms_propietari = models.CharField(max_length=100)
     tel_propietari = models.CharField(max_length=15, blank=True)
     email_propietari = models.EmailField(max_length=254, blank=True)
-    dni = models.CharField(unique=True, max_length=10, null=True, blank=True, default=None)
+    dni = models.CharField(unique=False, max_length=10, null=True, blank=True, default=None)
     
     '''Dades de l'establiment'''
     nom = models.CharField(max_length=100, verbose_name='Nom Establiment')
