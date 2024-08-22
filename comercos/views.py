@@ -130,6 +130,7 @@ def alta(request):
                 correus = [nou_establiment.email_propietari]
                 if settings.PRODUCCIO:
                     correus.append('svc.comerc@svc.cat')
+                    correus.append('sainzazueooj@svc.cat')
                 
                 email = EmailMessage('Comerç obert a Sant Vicenç de Castellet', email_body, to=correus)
                 email.content_subtype = "html"
