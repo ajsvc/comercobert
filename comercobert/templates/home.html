@@ -161,7 +161,7 @@
 
 
 {% block script %}
-<script src="https://maps.googleapis.com/maps/api/js?key={{ maps_api }}&callback=initMap&libraries=&v=weekly" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ maps_api }}&callback=initMap&libraries=marker&v=weekly" defer></script>
 
     
 <script type="text/javascript">
@@ -178,7 +178,8 @@ function initMap() {
 	  navigationControl: false,
 	  mapTypeControl: false,
 	  streetViewControl: false,
-	  scaleControl: true
+	  scaleControl: true,
+		mapId: "DEMO_MAP_ID",
 	});
   
 	
@@ -230,10 +231,10 @@ function initMap() {
 		
 		
 		
-			const marker{{ establiment.id }} = new google.maps.Marker({
+			const marker{{ establiment.id }} = new google.maps.marker.AdvancedMarkerElement({
 			      position: { lat: {{ establiment.location.y|unlocalize }}, lng: {{ establiment.location.x|unlocalize }} },
 			      map: map,
-			      title: "{{ establiment.nom }",
+			      title: '{{ establiment.nom|escapejs }}',
 			      zIndex: {{ establiment.id }},
 			});
 		

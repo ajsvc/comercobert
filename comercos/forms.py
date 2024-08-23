@@ -16,7 +16,11 @@ class FiltrarEstablimentsForm(forms.Form):
     categoria = forms.ModelChoiceField(required=False, queryset=Categoria.objects.all(), empty_label="seleccioni categoria")
     entrega_domicili = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'text-white' }))
     per_emportar = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class':'text-white' }))
-    
+    nom = forms.CharField(
+        required=False,
+        label="Buscar pel nom",
+        widget=forms.TextInput(attrs={'placeholder': 'Nom establiment...', 'class': 'form-control'})
+    )    
 
 class MySelectDateWidget(forms.SelectDateWidget):
 

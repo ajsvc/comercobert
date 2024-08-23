@@ -19,6 +19,7 @@ def home(request):
     categoria = request.GET.get('categoria')
     entrega_domicili = request.GET.get('entrega_domicili', None)
     per_emportar = request.GET.get('per_emportar', None)
+    nom = request.GET.get('nom',None)
     
     if categoria:
         establiments = establiments.filter(categories=categoria)
@@ -29,6 +30,9 @@ def home(request):
     
     if per_emportar:
         establiments = establiments.filter(per_emportar=True)
+    
+    if nom:
+        establiments = establiments.filter(nom__icontains=nom)
         
         
     context['maps_api'] = settings.MAPS_API_KEY
