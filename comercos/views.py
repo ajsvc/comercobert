@@ -74,7 +74,7 @@ def alta(request):
         # create a form instance and populate it with data from the request:
         form = AltaEstablimentForm(request.POST, request.FILES)
         # check whether it's valid:
-        if form.is_valid():
+        if form.is_valid():            
             # process the data in form.cleaned_data as required
             nou_establiment = Establiment()
             
@@ -101,13 +101,14 @@ def alta(request):
             
             nou_establiment.reparteix_domicili = form.cleaned_data['reparteix_domicili']
             nou_establiment.per_emportar = form.cleaned_data['per_emportar']
-            
-            nou_establiment.image = form.cleaned_data['image']
-            
-            
-            
+                        
+            image = request.FILES.get('image')
+                        
+            if image:
+                nou_establiment.image = image                       
+                        
             nou_establiment.save()
-
+            
             #afegim les categories
             nou_establiment.categories.set(form.cleaned_data['categories'])
 
