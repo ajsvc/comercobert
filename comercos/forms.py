@@ -1,4 +1,9 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.geos import Point
+from leaflet.forms.widgets import LeafletWidget
+from django.core.validators import validate_image_file_extension
 from .models import Establiment, Categoria
 from localflavor.es.forms import ESIdentityCardNumberField
 from django.forms import ModelForm
@@ -8,6 +13,7 @@ from django.contrib.gis.geos import Point
 from location_field.forms.spatial import LocationField
 from django.template.defaultfilters import slugify
 from image_cropping import ImageCropWidget
+
 
 
 
@@ -53,15 +59,33 @@ class AltaEstablimentForm(forms.Form):
     instagram = forms.URLField(required=False, label='', help_text="https://instagram.com/nom establiment",widget=forms.TextInput(attrs={'placeholder': 'lloc instagram...'}))
     horari = forms.CharField(required=False, label='', help_text="Horari de dilluns a diumenge", widget=forms.Textarea(attrs={'placeholder': 'horari...'}))
     
-    adreca = forms.CharField(max_length=100, label='', help_text='S\'actualitza al mapa, si no es posiciona correctament, pots moure el marcador al mapa. Adreça completa: Carrer, núm.0 , 08295 Sant Vicenç de Castellet', widget=forms.TextInput(attrs={'placeholder': 'adreça establiment...'}))
-    location = LocationField(label='', based_fields=['adreca'],initial=Point(1.8610, 41.6674))
+    adreca = forms.CharField(
+        max_length=100, label='',
+        help_text='S\'actualitza al mapa, si no es posiciona correctament, pots moure el marcador al mapa. Adreça completa: Carrer, núm.0 , 08295 Sant Vicenç de Castellet',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'adreça establiment...',
+            'style': 'width: 80%; display: inline-block;'
+        }))
     
+    # Cambiar location para usar el LeafletWidget
+    location = forms.CharField(
+        label='',
+        #widget=LeafletWidget(attrs={'map_height': '500px', })
+        widget=forms.HiddenInput()
+    )  
+        
     reparteix_domicili = forms.BooleanField(required=False, label='Entrega a domicili', widget=forms.CheckboxInput(attrs={'placeholder': 'reparteix a domicili...' }))
     per_emportar = forms.BooleanField(required=False, label='Menjar per emportar', widget=forms.CheckboxInput(attrs={'placeholder': 'menjar per emportar...' }))
     
     image = forms.ImageField(required=False, label='Imatge', help_text='adjunta una imatge del teu establiment. No ha de tenir molta resolució.')
     
-    politica_dades = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'placeholder': 'accepto' }))
+    politica_dades = forms.BooleanField(
+        label="Accepto la política de privacitat d'aquest lloc web",
+        widget=forms.CheckboxInput(attrs={
+            'placeholder': 'accepto',
+            'class': 'form-check-input'
+            }
+        ))
     
     
     categories = forms.MultipleChoiceField(
@@ -75,6 +99,14 @@ class AltaEstablimentForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(AltaEstablimentForm, self).__init__(*args, **kwargs)
         self.fields['categories'].choices = Categoria.objects.all().values_list('id','nom')
+    
+    def clean_location(self):
+        # Convierte la ubicación a un objeto Point antes de guardar
+        location = self.cleaned_data.get('location')
+        if location:
+            lon, lat = map(float, location.split())
+            return Point(lon, lat)
+        raise forms.Validatio
     
     def clean_dni_propietari(self):
         dni = self.cleaned_data.get('dni_propietari',None)
@@ -120,10 +152,57 @@ class AltaEstablimentForm(forms.Form):
        
         return cleaned_data
     
-    
+class EstablimentForm(forms.ModelForm):
+    class Meta:
+        model = Establiment
+        fields = (
+            "nom_propietari",
+            "cognoms_propietari",
+            "tel_propietari",
+            "email_propietari",
+            "dni",
+            "nom",
+            "categories",
+            "email",
+            "telefon",
+            "mobil",
+            "whatsapp",
+            "reparteix_domicili",
+            "per_emportar",
+            "web",
+            "facebook",
+            "instagram",
+            "descripcio",
+            "horaris",            
+            "cropping",            
+            "adreca",
+            "location"
+        )
+    image = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={"multiple":False}),
+        label=("Afegir imatge"),
+        required=False
+    )
         
+    def clean_location(self):
+        location_value = self.cleaned_data.get('location')
+
+        if isinstance(location_value, str):
+            try:
+                # Convierte la cadena WKT en un objeto GEOSGeometry
+                point = GEOSGeometry(location_value)
+                if not point.geom_type == 'Point':
+                    raise ValidationError("La ubicación debe ser un punto.")
+                return point
+            except Exception as e:
+                raise ValidationError(f"Error al procesar la ubicación: {e}")
         
-        
+        return location_value  # Si ya es un objeto Point
+
+    def clean_imatges(self):
+        """Asegúrate de que solo se suban imágenes."""
+        for upload in self.files.getlist("imatges"):
+            validate_image_file_extension(upload)
 '''
 class RegistreForm(forms.Form):
 	#id_butlleta = forms.IntegerField(widget=forms.HiddenInput())

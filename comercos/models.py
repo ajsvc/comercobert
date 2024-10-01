@@ -99,7 +99,7 @@ class Establiment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)    
     
     adreca = models.CharField(max_length=255)
-    location = LocationField(based_fields=['adreca'], zoom=15, default=Point(1.8610, 41.6674))
+    location = models.PointField(geography=True, default=Point(1.8610, 41.6674))
     
     
     visible = models.BooleanField(default=False)

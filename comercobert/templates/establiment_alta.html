@@ -1,280 +1,197 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
-{# Load the tag library #}
+{% load static %}
+{% load leaflet_tags %}
+
 {% load bootstrap4 %}
-
-{# Load CSS and JavaScript #}
 {% bootstrap_css %}
 
-
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
-
-
-
 {% block estil %}
-
-
+/* Estilo del formulario */
 #regForm {
-  background-color: #ffffff;
-  margin: 0 auto;
-  font-family: Raleway;
-  padding: 40px;
-  width: 70%;
-  min-width: 300px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    font-family: Raleway;
+    padding: 40px;
+    width: 70%;
+    min-width: 300px;
 }
 
 h1 {
-  text-align: center;  
+    text-align: center;
 }
 
 input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
-
-/* Mark input boxes that gets an error on validation: */
-input.invalid, select.invalid {
-  background-color: #ffdddd;
-}
-
-/* Hide all steps by default: */
-.tab {
-  display: none;
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
 }
 
 button {
-  background-color: #832b2a;
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 17px;
-  font-family: Raleway;
-  cursor: pointer;
+    background-color: #832b2a;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer;
 }
 
 button:hover {
-  opacity: 0.8;
+    opacity: 0.8;
+}
+
+.form-check-input:checked {
+  background-color: #007bff; /* Color de fondo del checkbox marcado */
+  border-color: #007bff; /* Color del borde del checkbox marcado */
+}
+
+.form-check-input {
+  
+  
+  transform: scale(1.5); /* Aumenta el tamaño del checkbox al 150% */
+  cursor: pointer; /* Cambia el puntero al pasar por encima */
 }
 
 #prevBtn {
-  background-color: #bbbbbb;
-}
-
-/* Make circles that indicate the steps of the form: */
-.step {
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbbbbb;
-  border: none;  
-  border-radius: 50%;
-  display: inline-block;
-  opacity: 0.5;
-}
-
-.step.active {
-  opacity: 1;
-}
-
-/* Mark the steps that are finished and valid: */
-.step.finish {
-  background-color: #832b2a;
-}
-
-#formButlleta{
-  text-align: left;
-}
-#formButlleta input{
-  margin-top: 3px;
-}
-#formButlleta select{
-  padding: 3px 3px 3px 0;
-  margin: 5px 0 5px 0;
-}
-#formButlleta label{
-  display: block;
-  margin: 10px 0;
-}
-.formButtons{
-  overflow:auto;
-  margin-top: 10px;
+    background-color: #bbbbbb;
 }
 
 
-.form-check-input{
-  position: relative !important;
-  margin: 0 !important;
-  width: 20px !important;
-}
-.form-check-label{
-  margin: 0 !important;
-  display: inline !important;
-}
-
-#map_location{
-	height: 400px !important; 
-	width: 100% !important;
-	
+#map_location {
+    height: 400px;  /* Asegura un tamaño adecuado */
 }
 
 {% endblock %}
-
-
 {% block content %}
-
-
 <div id="caixaPrincipal" class="text-center container-lg">
     <h1>Formulari d'inscripció per a establiments</h1>
-    
-    <!-- 
-	<div class="row">
-	  <div class="col-md-12">
-	
-	    <ul class="stepper stepper-horizontal">
-	
-	      <li class="completed">
-	        <a href="#!">
-	          <span class="circle">1</span>
-	          <span class="label">Dades propietari</span>
-	        </a>
-	      </li>
-	
-	      <li class="active">
-	        <a href="#!">
-	          <span class="circle">2</span>
-	          <span class="label">Dades establiment</span>
-	        </a>
-	      </li>
-	
-	      <li class="active">
-	        <a href="#!">
-	          <span class="circle">3</span>
-	          <span class="label">Serveis</span>
-	        </a>
-	      </li>
-	      
-	      <li class="active">
-	        <a href="#!">
-	          <span class="circle">4</span>
-	          <span class="label">Política de dades</span>
-	        </a>
-	      </li>
-	
-	    </ul>
-	
-	  </div>
-	</div>
-	 -->
- 	
-	
-	<div class="container-lg text-left mt-5 mb-5">
-		{% bootstrap_form_errors form %}
-		<form action="{% url 'alta' %}" method="post" id="formAltaEstabliment" role="form" enctype="multipart/form-data">
-			{% csrf_token %}
-  			
-  			
-  			<fieldset class="form-group">
-  				<legend>Dades propietari:</legend>
-  				<p>Les dades del propietari no es faran públiques en aquest lloc web, només s'utilitzaran com a informació de contacte per part de l'Ajuntament.</p>
-			     {% bootstrap_field form.nom_propietari %}
-			     {% bootstrap_field form.cognoms_propietari %}
-			     {% bootstrap_field form.dni_propietari %}
-			     {% bootstrap_field form.telefon_propietari %}
-			     {% bootstrap_field form.email_propietari %}
-			     {% bootstrap_field form.email2_propietari %}
-			     
-			</fieldset>
-  			
-  			<fieldset class="form-group">
-  				<legend>Dades establiment:</legend>
-  				<p>Les dades de l'establiment es faran públiques en aquest lloc web.</p>
-			     {% bootstrap_field form.nom %}
-			     {% bootstrap_field form.email %}
-			     {% bootstrap_field form.email2 %}
-			     {% bootstrap_field form.telefon %}
-			     {% bootstrap_field form.mobil %}
-			     {% bootstrap_field form.whatsapp %}
-			     {% bootstrap_field form.web %}
-			     {% bootstrap_field form.facebook %}
-			     {% bootstrap_field form.instagram %}
-			     {% bootstrap_field form.horari %}
-			     <div class="mt-5"></div>
-			     {% bootstrap_field form.categories %}
-			     
-  				 <div class="mt-5"></div>
-  				 {% bootstrap_field form.adreca %}
-			     {% bootstrap_field form.location %}
-			     
-			</fieldset>
-			
-			<fieldset class="form-group">
-				<legend>Imatge establiment:</legend>
-				<div class="custom-file">
-				  <input type="file" name="image" accept="image/*" class="custom-file-input" id="id_image">
-				  <label class="custom-file-label" for="id_image">Tria un fitxer...</label><br/>
-				  <small class="form-text text-muted">Adjunta una imatge del teu establiment. No ha de tenir molta resolució.</small>
-				</div>
-				
-				
-				
-			</fieldset>
-			<fieldset class="form-group">
-				<legend>Serveis:</legend>
-				 {% bootstrap_field form.reparteix_domicili %}
-			     {% bootstrap_field form.per_emportar %}
-			</fieldset>
-			
-			<fieldset class="form-group">
-				<legend>Política de dades:</legend>
-				 
-				 
-		            <div class="form-check">
-		              <input type="checkbox" class="form-check-input" name="politica_dades" id="id_politica_dades" required>
-		              <label class="form-check-label" for="id_politica_dades">
-		              		  Accepto la política de privacitat d'aquest lloc web. 
-		                      <a class="btn btn-link" href="https://www.svc.cat/condicions-dus/" target="_blank" role="button">Política de privacitat</a>
-		              </label>
-		            </div>
-					
+  
+    <div class="container-lg text-left mt-5 mb-5">
+        {% bootstrap_form_errors form %}
+        <form action="{% url 'alta' %}" method="post" id="formAltaEstabliment" role="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            <fieldset class="form-group">
+              <legend>Dades propietari:</legend>
+              <p>Les dades del propietari no es faran públiques en aquest lloc web, només s'utilitzaran com a informació de contacte per part de l'Ajuntament.</p>
+               {% bootstrap_field form.nom_propietari %}
+               {% bootstrap_field form.cognoms_propietari %}
+               {% bootstrap_field form.dni_propietari %}
+               {% bootstrap_field form.telefon_propietari %}
+               {% bootstrap_field form.email_propietari %}
+               {% bootstrap_field form.email2_propietari %}               
+          </fieldset>
 
+          <fieldset class="form-group">
+            <legend>Dades establiment:</legend>
+            <p>Les dades de l'establiment es faran públiques en aquest lloc web.</p>
+              {% bootstrap_field form.nom %}
+              {% bootstrap_field form.email %}
+              {% bootstrap_field form.email2 %}
+              {% bootstrap_field form.telefon %}
+              {% bootstrap_field form.mobil %}
+              {% bootstrap_field form.whatsapp %}
+              {% bootstrap_field form.web %}
+              {% bootstrap_field form.facebook %}
+              {% bootstrap_field form.instagram %}
+              {% bootstrap_field form.horari %}
+              <div class="mt-5"></div>
+              {% bootstrap_field form.categories %}
+              
+              <div class="mt-5"></div>
+              <fieldset>
+              <legend>Ubicació</legend>
+              <div class="form-group">
+                <div class="button-group">
+                  <label for="id_adreca" class="form-label">Adreça:</label>
+                  {{ form.adreca }}
+                  <button type="button" id="search_address" class="btn btn-primary">
+                      <i class="bi bi-search">&nbsp;Cercar</i> <!-- Icono de lupa -->
+                  </button>                  
+                  <small>S'actualitza al mapa, si no es posiciona correctament, pots moure el marcador al mapa. Adreça completa: Carrer, núm.0 , 08295 Sant Vicenç de Castellet</small>
+                </div>
+              </div>
+              <input type="hidden" name="location" id="id_location" value="{{ form.location.value|default:'' }}">
+              <div id="id_location-map" style="height: 500px;"></div> <!-- Contenedor del mapa -->
+          </fieldset>          
+          
+          <fieldset class="form-group">
+            <legend>Imatge establiment:</legend>
+            <div class="custom-file">
+              <input type="file" name="image" accept="image/*" class="custom-file-input" id="id_image">
+              <label class="custom-file-label" for="id_image">Tria un fitxer...</label><br/>
+              <small class="form-text text-muted">Adjunta una imatge del teu establiment. No ha de tenir molta resolució.</small>
+            </div>            
+          </fieldset>
 
-			     {% bootstrap_field form.captcha %}
-			</fieldset>
-			
-			{% bootstrap_button "Guardar" button_type="submit" button_class="btn btn-primary mb-2" %}
-		</form>
-	</div>
-	
-	
-	
-	
-	
-	
-    
-   
+          <fieldset class="form-group">
+            <legend>Serveis:</legend>
+             {% bootstrap_field form.reparteix_domicili %}
+               {% bootstrap_field form.per_emportar %}
+          </fieldset>
+          
+          <fieldset class="form-group">
+            <legend>Política de dades:</legend>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="politica_dades" id="id_politica_dades" required>
+                <label class="form-check-label" for="id_politica_dades">
+                      Accepto la política de privacitat d'aquest lloc web. 
+                        <a class="btn btn-link" href="https://www.svc.cat/condicions-dus/" target="_blank" role="button">Política de privacitat</a>
+                </label>
+              </div>
+               {% bootstrap_field form.captcha %}
+          </fieldset>          
+          {% bootstrap_button "Guardar" button_type="submit" button_class="btn btn-primary mb-2" %}
+    </div>
 </div>
-
-
 {% endblock %}
 
 {% block extra-js %}
-	<script>
-	$( "#id_location" ).prop( "disabled", true );
-	
-	$( "#formAltaEstabliment" ).submit(function( event ) {
-		$( "#id_location" ).prop( "disabled", false );  
-		
-	});
-	
-		
-	</script>
+  {% leaflet_css %}
+  {% leaflet_js %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mapContainer = document.getElementById('id_location-map');
+        var map = L.map('id_location-map').setView([41.6690, 1.8610], 15); // Coordenadas centradas en Sant Vicenç de Castellet
 
 
-	{{form.media}}
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        var marker = L.marker([41.62, 1.88]).addTo(map); // Marcador inicial
+
+        // Configurar la acción de clic en el mapa
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng);
+            document.getElementById('id_location').value = e.latlng.lng + ' ' + e.latlng.lat; // Actualiza el campo oculto
+        });
+
+        // Función para buscar dirección
+        document.getElementById('search_address').addEventListener('click', function() {
+            var address = document.getElementById('id_adreca').value;
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&bounded=1&viewbox=1.8510,41.6790,1.8710,41.6590`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        var lat = data[0].lat;
+                        var lon = data[0].lon;
+                        marker.setLatLng([lat, lon]); // Actualiza la posición del marcador
+                        map.setView([lat, lon], 18); // Centra el mapa en la nueva ubicación
+                        document.getElementById('id_location').value = `${lon} ${lat}`; // Actualiza el campo oculto con la nueva ubicación
+                    } else {
+                        alert("No s'ha trobat la direcció, provi introduint 'carrer, avinguda, plaça, etc.' al davant.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching the location:', error);
+                    alert("Error al cercar la direcció.");
+                });
+        });
+    });
+    </script>
 {% endblock %}
-
-

@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import Http404, HttpResponse
 
+from .serializers import EstablimentSerializer
 from .models import Categoria, Establiment, OpeningHours
 from django.template.context import RequestContext
 from django.db.models import Q
@@ -34,9 +35,10 @@ def home(request):
     if nom:
         establiments = establiments.filter(nom__icontains=nom)
         
-        
-    context['maps_api'] = settings.MAPS_API_KEY
-    
+      
+       
+    establiments_json = EstablimentSerializer(establiments, many=True)
+
     context['establiments'] = establiments
     context['categories'] = Categoria.objects.all()
 
@@ -44,9 +46,7 @@ def home(request):
     form = FiltrarEstablimentsForm(initial={'entrega_domicili': entrega_domicili, 'per_emportar': per_emportar, 'categoria': categoria})
     context['form'] = form
     
-    
-    
-    
+            
     return render(request, template, context) 
 
 
