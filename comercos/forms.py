@@ -176,7 +176,8 @@ class EstablimentForm(forms.ModelForm):
             "horaris",            
             "cropping",            
             "adreca",
-            "location"
+            "location",
+            "visible"
         )
     image = forms.FileField(
         widget=forms.ClearableFileInput(attrs={"multiple":False}),
