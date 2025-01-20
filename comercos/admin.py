@@ -61,8 +61,8 @@ class LeafletWidget(forms.TextInput):
                 map.on('click', function(e) {{
                     marker.setLatLng(e.latlng);
                     var lng = e.latlng.lng.toFixed(10);
-                    var lat = e.latlng.lat.toFixed(10);
-                    document.getElementById("{name}").value = "SRID=4326;POINT (" + lng + " " + lat + ")";
+                    var lat = e.latlng.lat.toFixed(10);                    
+                    document.querySelector("#id_location").value = "SRID=4326;POINT (" + lng + " " + lat + ")";
                 }});
 
                 // Actualizar el campo location al arrastrar el marcador
@@ -70,7 +70,7 @@ class LeafletWidget(forms.TextInput):
                     var latlng = marker.getLatLng();
                     var lng = latlng.lng.toFixed(10);
                     var lat = latlng.lat.toFixed(10);
-                    document.getElementById("{name}").value = "SRID=4326;POINT (" + lng + " " + lat + ")";
+                    document.querySelector("#id_location").value = "SRID=4326;POINT (" + lng + " " + lat + ")";
                 }});
 
                 // Crear el botón de búsqueda y añadirlo al contenedor del input
@@ -90,7 +90,7 @@ class LeafletWidget(forms.TextInput):
                                     var lng = data[0].lon;
                                     map.setView([lat, lng], 15);
                                     marker.setLatLng([lat, lng]);
-                                    document.getElementById("{name}").value = "SRID=4326;POINT (" + lng + " " + lat + ")";
+                                    document.querySelector("#id_location").value = "SRID=4326;POINT (" + lng + " " + lat + ")";
                                 }} else {{
                                     console.warn('Dirección no encontrada.');
                                 }}
@@ -110,7 +110,7 @@ class LeafletWidget(forms.TextInput):
                 divAdreca.appendChild(searchButton);  // Añadir el botón al div contenedor
 
                 // Mostrar la ubicación si ya existe en el campo location
-                var locationFieldValue = document.getElementById("{name}").value;
+                var locationFieldValue = document.querySelector("#id_location").value;
                 if (locationFieldValue) {{
                     var coords = locationFieldValue.replace("SRID=4326;POINT (", "").replace(")", "").split(" ");
                     if (coords.length == 2) {{
